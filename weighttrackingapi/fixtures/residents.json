@@ -1,0 +1,132 @@
+[
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 1,
+    "fields": {
+      "first_name": "Michael",
+      "last_name": "Scott",
+      "room_num": 100,
+      "admission_wt": 185.4,
+      "usual_wt": 170,
+      "height": 69,
+      "admission_date": "2022-07-25"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 2,
+    "fields": {
+      "first_name": "Schrute",
+      "last_name": "Dwight",
+      "room_num": 101,
+      "admission_wt": 200.4,
+      "usual_wt": 210,
+      "height": 68,
+      "admission_date": "2021-06-15"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 3,
+    "fields": {
+      "first_name": "Kapoor",
+      "last_name": "Kelly",
+      "room_num": 102,
+      "admission_wt": 156.4,
+      "usual_wt": 152,
+      "height": 64,
+      "admission_date": "2022-08-01"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 4,
+    "fields": {
+      "first_name": "Creed",
+      "last_name": "Bratton",
+      "room_num": 103,
+      "admission_wt": 145.2,
+      "usual_wt": 160,
+      "height": 68,
+      "admission_date": "2022-11-15"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 5,
+    "fields": {
+      "first_name": "Phyllis",
+      "last_name": "Lapin-Vance",
+      "room_num": 104,
+      "admission_wt": 185.3,
+      "usual_wt": 215,
+      "height": 65,
+      "admission_date": "2021-07-16"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 6,
+    "fields": {
+      "first_name": "Toby",
+      "last_name": "Flenderson",
+      "room_num": 105,
+      "admission_wt": 190.3,
+      "usual_wt": 200,
+      "height": 73,
+      "admission_date": "2021-04-15"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 7,
+    "fields": {
+      "first_name": "Beesly",
+      "last_name": "Pam",
+      "room_num": 106,
+      "admission_wt": 128.8,
+      "usual_wt": 126,
+      "height": 67,
+      "admission_date": "2022-06-15"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 8,
+    "fields": {
+      "first_name": "Andy",
+      "last_name": "Bernard",
+      "room_num": 107,
+      "admission_wt": 185.9,
+      "usual_wt": 190,
+      "height": 74,
+      "admission_date": "2022-03-22"
+    }
+  },
+  {
+    "model": "weighttrackingapi.resident",
+    "pk": 9,
+    "fields": {
+      "first_name": "Kevin",
+      "last_name": "Malone",
+      "room_num": 108,
+      "admission_wt": 220.3,
+      "usual_wt": 230,
+      "height": 72,
+      "admission_date": "2022-08-15"
+    }
+  },
+   {
+     "model": "weighttrackingapi.resident",
+     "pk": 10,
+     "fields": {
+       "first_name": "Deangelo",
+       "last_name": "Vickers",
+       "room_num": 109,
+       "admission_wt": 185.3,
+       "usual_wt": 215,
+       "height": 73,
+       "admission_date": "2022-08-06"
+     }
+   }
+]

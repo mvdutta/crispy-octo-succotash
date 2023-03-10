@@ -3,3 +3,4 @@ from .weight import Weight
 from .resident import Resident
 from .weight_sheet import WeightSheet
 from .message import Message
+from .employee_message import EmployeeMessage

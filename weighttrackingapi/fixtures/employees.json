@@ -1,0 +1,35 @@
+[
+  {
+    "model": "weighttrackingapi.employee",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "role": "RD"
+    }
+  },
+  {
+    "model": "weighttrackingapi.employee",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "role": "LPN/RN"
+    }
+  },
+  {
+    "model": "weighttrackingapi.employee",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "role": "CNA"
+    }
+  },
+  {
+    "model": "weighttrackingapi.employee",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "role": "MD"
+    }
+  }
+  
+]
