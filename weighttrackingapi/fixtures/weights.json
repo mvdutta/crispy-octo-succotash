@@ -1,0 +1,92 @@
+[
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 1,
+    "fields": {
+      "resident": 1,
+      "date": "2022-09-13",
+      "weight": 180.7
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 2,
+    "fields": {
+      "resident": 1,
+      "date": "2022-12-06",
+      "weight": 176.0
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 3,
+    "fields": {
+      "resident": 1,
+      "date": "2023-01-31",
+      "weight": 175.3
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 4,
+    "fields": {
+      "resident": 1,
+      "date": "2023-02-21",
+      "weight": 170.6
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 5,
+    "fields": {
+      "resident": 1,
+      "date": "2023-02-28",
+      "weight": 165.3
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 6,
+    "fields": {
+      "resident": 2,
+      "date": "2022-09-13",
+      "weight": 209.3
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 7,
+    "fields": {
+      "resident": 2,
+      "date": "2022-12-06",
+      "weight": 207.4
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 8,
+    "fields": {
+      "resident": 2,
+      "date": "2023-01-31",
+      "weight": 206.8
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 9,
+    "fields": {
+      "resident": 2,
+      "date": "2023-02-21",
+      "weight": 206.2
+    }
+  },
+  {
+    "model": "weighttrackingapi.weight",
+    "pk": 10,
+    "fields": {
+      "resident": 2,
+      "date": "2023-02-28",
+      "weight": 207.6
+    }
+  }
+]

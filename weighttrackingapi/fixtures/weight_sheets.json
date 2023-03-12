@@ -1,0 +1,162 @@
+[
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 1,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 1,
+      "current_wt": 165.3,
+      "reweighed": true,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": "floor"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 2,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 2,
+      "current_wt": 207.6,
+      "reweighed": false,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": true,
+      "show_alert": false,
+      "scale_type": "chair"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 3,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 3,
+      "current_wt": 142.8,
+      "reweighed": true,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": "floor"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 4,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 4,
+      "current_wt": null,
+      "reweighed": false,
+      "refused": true,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": null
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 5,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 5,
+      "current_wt": null,
+      "reweighed": false,
+      "refused": false,
+      "not_in_room": true,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": null
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 6,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 6,
+      "current_wt": 190.7,
+      "reweighed": false,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": "chair"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 7,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 7,
+      "current_wt": 130.6,
+      "reweighed": false,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": false,
+      "scale_type": "bed"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 8,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 8,
+      "current_wt": 175.2,
+      "reweighed": true,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": false,
+      "show_alert": true,
+      "scale_type": "chair"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 9,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 9,
+      "current_wt": 195.8,
+      "reweighed": false,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": true,
+      "show_alert": false,
+      "scale_type": "bed"
+    }
+  },
+  {
+    "model": "weighttrackingapi.weightsheet",
+    "pk": 10,
+    "fields": {
+      "employee": 3,
+      "date": "2023-02-28",
+      "resident": 8,
+      "current_wt": 300.1,
+      "reweighed": true,
+      "refused": false,
+      "not_in_room": false,
+      "daily_wts": true,
+      "show_alert": true,
+      "scale_type": "chair"
+    }
+  }
+]

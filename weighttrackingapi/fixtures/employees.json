@@ -30,6 +30,14 @@
       "user": 4,
       "role": "MD"
     }
-  }
+  },
+   {
+     "model": "weighttrackingapi.employee",
+     "pk": 5,
+     "fields": {
+       "user": 5,
+       "role": "NP"
+     }
+   }
   
 ]

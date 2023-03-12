@@ -34,7 +34,7 @@
       "groups": [],
       "user_permissions": []
     }
-    },
+  },
   {
     "model": "auth.user",
     "pk": 3,
@@ -52,8 +52,8 @@
       "groups": [],
       "user_permissions": []
     }
-    },
-      {
+  },
+  {
     "model": "auth.user",
     "pk": 4,
     "fields": {
@@ -69,6 +69,24 @@
       "date_joined": "2013-10-28T14:51:39.989Z",
       "groups": [],
       "user_permissions": []
-    }  
-  }
+    }
+  },
+    {
+      "model": "auth.user",
+      "pk": 5,
+      "fields": {
+        "password": "pbkdf2_sha256$390000$zGhk1DA8dsqtW59eQBezrz$wcR0OQT4zQc4zbDSfjy6hwNhTpukEu0dN5BU0O8NtoM=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "mjamison",
+        "first_name": "Monique",
+        "last_name": "Jamison",
+        "email": "mjamison@gsrh.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2018-08-28T14:51:39.989Z",
+        "groups": [],
+        "user_permissions": []
+      }
+    }
 ]

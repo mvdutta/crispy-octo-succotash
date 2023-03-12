@@ -7,12 +7,13 @@ class WeightSheet(models.Model):
     date = models.DateField(auto_now=False, auto_now_add=False)
     resident = resident = models.ForeignKey(
         "Resident", on_delete=models.CASCADE, related_name='resident_sheet')
+    current_wt = models.DecimalField(max_digits=5, decimal_places=1, null=True)
     reweighed = models.BooleanField(default=False)
     refused = models.BooleanField(default=False)
     not_in_room = models.BooleanField(default=False)
     daily_wts = models.BooleanField(default=False)
     show_alert = models.BooleanField(default=False)
-    scale_type = models.CharField(max_length=50)
+    scale_type = models.CharField(max_length=50, null=True)
 
 
 

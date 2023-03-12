@@ -1,0 +1,24 @@
+[
+  {
+    "model": "weighttrackingapi.message",
+    "pk": 1,
+    "fields": {
+      "subject": "C. Bratton refused wt x 2 weeks",
+      "message_body": "C. Bratton refused wt x 2 weeks. Nurse reports cognitive decline and increased irritability. Resident with h/o poor appetite. Intakes between 50-75%. Weight appears to be declining with 8.7# wt loss noted since admission 11/15. Resident states he is 'lonely, angry and bored and wants to leave'. Nurse and SW notified. Encouraged dining room for meals and resident agreed to add snacks between meals and a milkshake after dinner. Rec. check PAB, B12, and 25(OH)D and psych consult.",
+      "date_created": "2022-03-01",
+      "read": true,
+      "deleted": false
+    }
+  },
+  {
+    "model": "weighttrackingapi.message",
+    "pk": 2,
+    "fields": {
+      "subject": "Current weights needed",
+      "message_body": "C. Bratton refused wt x 2 weeks. Lapin-Vance was in PT and agreed to be weighed when CNA arrives.",
+      "date_created": "2022-02-28",
+      "read": true,
+      "deleted": false
+    }
+  }
+]
