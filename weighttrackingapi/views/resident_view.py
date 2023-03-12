@@ -17,6 +17,19 @@ class ResidentView(ViewSet):
         residents = Resident.objects.all()
         serializer = ResidentSerializer(residents, many=True)
         return Response(serializer.data)
+    
+    def retrieve(self, request, pk):
+        """Handle GET requests for single resident
+
+        Returns:
+            Response -- JSON serialized resident
+        """
+        try:
+            resident = Resident.objects.get(pk=pk)
+        except Resident.DoesNotExist:
+            return Response({'message': 'You sent an invalid resident ID'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ResidentSerializer(resident)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ResidentSerializer(serializers.ModelSerializer):
     """SON serializer for residents"""
