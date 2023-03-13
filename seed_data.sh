@@ -7,7 +7,7 @@ python manage.py loaddata tokens
 python manage.py loaddata employees
 python manage.py loaddata residents
 python manage.py loaddata weight_sheets
-# python manage.py loaddata weights
-# python manage.py loaddata messages
-# python manage.py loaddata employee-message
+python manage.py loaddata weights
+python manage.py loaddata messages
+python manage.py loaddata employee_messages
 

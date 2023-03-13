@@ -32,7 +32,7 @@ class ResidentView(ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ResidentSerializer(serializers.ModelSerializer):
-    """SON serializer for residents"""
+    """JSON serializer for residents"""
     class Meta:
         model = Resident
         fields = ('id', 'first_name', 'last_name', 'room_num', 'admission_wt', 'usual_wt', 'height', 'admission_date')
