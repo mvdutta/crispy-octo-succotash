@@ -63,7 +63,31 @@ class WeightSheetView(ViewSet):
         )
         wt_sheet.save()
         serializer = WeightSheetSerializer(wt_sheet)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk):
+        """Handle PUT operations for weight sheet
+
+        Returns
+            Response -- Empty body with 204 status code
+        """
+        employee = Employee.objects.get(user=request.auth.user)
+        resident = Resident.objects.get(pk=request.data["resident"])
+        wt_sheet = WeightSheet.objects.get(pk=pk)
+
+        wt_sheet.employee=employee
+        wt_sheet.resident=resident
+        wt_sheet.date=request.data["date"]
+        wt_sheet.reweighed=request.data["reweighed"]
+        wt_sheet.refused=request.data["refused"]
+        wt_sheet.not_in_room=request.data["not_in_room"]
+        wt_sheet.daily_wts=request.data["daily_wts"]
+        wt_sheet.show_alert=request.data["show_alert"]
+        wt_sheet.scale_type=request.data["scale_type"]
+        wt_sheet.save()
+        
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
 
 class WeightSheetSerializer(serializers.ModelSerializer):
     """JSON serializer for weight_sheets"""
