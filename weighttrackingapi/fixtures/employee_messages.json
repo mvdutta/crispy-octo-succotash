@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "sender": 1,
-      "recipient": 4,
+      "recipient": 2,
       "message": 1
     }
   },
@@ -13,16 +13,7 @@
     "pk": 2,
     "fields": {
       "sender": 1,
-      "recipient": 5,
-      "message": 1
-    }
-  },
-  {
-    "model": "weighttrackingapi.employeemessage",
-    "pk": 3,
-    "fields": {
-      "sender": 1,
-      "recipient": 2,
+      "recipient": 4,
       "message": 2
     }
   }
