@@ -32,7 +32,7 @@ class WeightSheetView(ViewSet):
         """Handle GET requests for single weight sheet
 
         Returns:
-            Response -- JSON serialized resident
+            Response -- JSON serialized weight sheet
         """
         try:
             wt_sheet = WeightSheet.objects.get(pk=pk)
@@ -85,7 +85,7 @@ class WeightSheetView(ViewSet):
         wt_sheet.show_alert=request.data["show_alert"]
         wt_sheet.scale_type=request.data["scale_type"]
         wt_sheet.save()
-        
+
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
