@@ -8,6 +8,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from weighttrackingapi.models import Employee
 
+ROLES = ["NP", "RD", "MD", "RN", "LPN", "CNA"] 
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -17,12 +19,12 @@ def login_user(request):
     Method arguments:
       request -- The full HTTP request object
     '''
-    email = request.data['email']
+    username = request.data['username']
     password = request.data['password']
 
     # Use the built-in authenticate method to verify
     # authenticate returns the user object or None if no user is found
-    authenticated_user = authenticate(username=email, password=password)
+    authenticated_user = authenticate(username=username, password=password)
 
     # If authentication was successful, respond with their token
     if authenticated_user is not None:
@@ -31,7 +33,6 @@ def login_user(request):
         data = {
             'valid': True,
             'token': token.key,
-            'staff': authenticated_user.is_staff
         }
         return Response(data)
     else:
@@ -48,74 +49,54 @@ def register_user(request):
     Method arguments:
       request -- The full HTTP request object
     '''
-    account_type = request.data.get('account_type', None)
-    email = request.data.get('email', None)
+    # Create a new user by invoking the `create_user` helper method
+    # on Django's built-in User model
+
+    missing_fields = []
+    username = request.data.get('username', None)
+    password = request.data.get('password', None)
     first_name = request.data.get('first_name', None)
     last_name = request.data.get('last_name', None)
-    password = request.data.get('password', None)
+    email = request.data.get('email', None)
+    role = request.data.get('role', None)
 
-    if account_type is not None \
-            and email is not None\
-            and first_name is not None \
-            and last_name is not None \
-            and password is not None:
+    if not username:
+        missing_fields.append("username")
+    if not password:
+        missing_fields.append("password")
+    if not first_name:
+        missing_fields.append("first_name")
+    if not last_name:
+        missing_fields.append("last_name")
+    if not role:
+        missing_fields.append("role")
+    if not email:
+        missing_fields.append("email")
+    
+    if missing_fields:
+        msg = "Please provide: " + ", ".join(missing_fields)
+        return Response({'message': msg}, status=status.HTTP_400_BAD_REQUEST)
+    if role not in ROLES:
+        msg = f'Role {role} is not authorized. Please provide a valid role.'
+        return Response({'message': msg}, status=status.HTTP_400_BAD_REQUEST)
 
-        if account_type == 'customer':
-            address = request.data.get('address', None)
-            if address is None:
-                return Response(
-                    {'message': 'You must provide an address for a customer'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        elif account_type == 'employee':
-            specialty = request.data.get('specialty', None)
-            if specialty is None:
-                return Response(
-                    {'message': 'You must provide a specialty for an employee'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        else:
-            return Response(
-                {'message': 'Invalid account type. Valid values are \'customer\' or \'employee\''},
-                status=status.HTTP_400_BAD_REQUEST
-            )
 
-        try:
-            # Create a new user by invoking the `create_user` helper method
-            # on Django's built-in User model
-            new_user = User.objects.create_user(
-                username=request.data['email'],
-                email=request.data['email'],
-                password=request.data['password'],
-                first_name=request.data['first_name'],
-                last_name=request.data['last_name']
-            )
-        except IntegrityError:
-            return Response(
-                {'message': 'An account with that email address already exists'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+    new_user = User.objects.create_user(
+        username = request.data['username'],
+        password = request.data['password'],
+        first_name = request.data['first_name'],
+        last_name = request.data['last_name'],
+        email = request.data['email']
+    )
 
-        account = None
+    # Now save the extra info in the weighttrackingapi_employee table
+    employee = Employee.objects.create(
+        role=request.data['role'],
+        user=new_user
+    )
 
-        if account_type == 'customer':
-            account = Customer.objects.create(
-                address=request.data['address'],
-                user=new_user
-            )
-        elif account_type == 'employee':
-            new_user.is_staff = True
-            new_user.save()
-
-            account = Employee.objects.create(
-                specialty=request.data['specialty'],
-                user=new_user
-            )
-
-        # Use the REST Framework's token generator on the new user account
-        token = Token.objects.create(user=account.user)
-        # Return the token to the client
-        data = {'token': token.key, 'staff': new_user.is_staff}
-        return Response(data)
-
-    return Response({'message': 'You must provide email, password, first_name, last_name and account_type'}, status=status.HTTP_400_BAD_REQUEST)
+    # Use the REST Framework's token generator on the new user account
+    token = Token.objects.create(user=employee.user)
+    # Return the token to the client
+    data = {'token': token.key}
+    return Response(data)
