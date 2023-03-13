@@ -44,7 +44,6 @@ class MessageView(ViewSet):
         """
         sender = Employee.objects.get(user=request.auth.user)
         recipients =request.data["recipients"]
-        print(recipients)
         message = Message.objects.create(
             subject=request.data["subject"],
             message_body=request.data["message_body"],
@@ -54,7 +53,6 @@ class MessageView(ViewSet):
         )
         message.save()
         serializer = MessageSerializer(message)
-        # print(f"The new message has id: {serializer.data['id']}")
         new_message_id = serializer.data['id']
         for recipient in recipients:
             employee_message=EmployeeMessage.objects.create(
@@ -73,9 +71,6 @@ class MessageView(ViewSet):
             Response -- Empty body with 204 status code
         """
         message = Message.objects.get(pk=pk)
-        message.subject = request.data["subject"]
-        message.message_body = request.data["message_body"]
-        message.date_created = request.data["date_created"]
         message.read = request.data["read"]
         message.deleted = request.data["deleted"]
         message.save()
