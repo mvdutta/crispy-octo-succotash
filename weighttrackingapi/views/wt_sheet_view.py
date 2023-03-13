@@ -2,7 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from weighttrackingapi.models import WeightSheet
+from weighttrackingapi.models import WeightSheet, Employee, Resident
 
 
 class WeightSheetView(ViewSet):
@@ -25,11 +25,8 @@ class WeightSheetView(ViewSet):
         if "resident" in request.query_params and "date" in request.query_params:
             wt_sheets = wt_sheets.filter(
                 resident=request.query_params['resident'], date=request.query_params['date'])
-
-
         serializer = WeightSheetSerializer(wt_sheets, many=True)
         return Response(serializer.data)
-
 
     def retrieve(self, request, pk):
         """Handle GET requests for single weight sheet
@@ -44,6 +41,29 @@ class WeightSheetView(ViewSet):
         serializer = WeightSheetSerializer(wt_sheet)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def create(self, request):
+        """Handle POST operations
+
+        Returns
+            Response -- JSON serialized weight sheet instance
+        """
+        employee = Employee.objects.get(user=request.auth.user)
+        resident = Resident.objects.get(pk=request.data["resident"])
+
+        wt_sheet = WeightSheet.objects.create(
+            employee=employee,
+            resident=resident,
+            date=request.data["date"],
+            reweighed=request.data["reweighed"],
+            refused=request.data["refused"],
+            not_in_room=request.data["not_in_room"],
+            daily_wts=request.data["daily_wts"],
+            show_alert=request.data["show_alert"],
+            scale_type=request.data["scale_type"],
+        )
+        wt_sheet.save()
+        serializer = WeightSheetSerializer(wt_sheet)
+        return Response(serializer.data)
 
 class WeightSheetSerializer(serializers.ModelSerializer):
     """JSON serializer for weight_sheets"""
