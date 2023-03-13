@@ -1,0 +1,53 @@
+from django.http import HttpResponseServerError
+from rest_framework.viewsets import ViewSet
+from rest_framework.response import Response
+from rest_framework import serializers, status
+from weighttrackingapi.models import WeightSheet
+
+
+class WeightSheetView(ViewSet):
+    """Weight Tracking weight_sheet view"""
+
+    def list(self, request):
+        """Handle GET requests to get all weight_sheets
+
+        Returns:
+            Response -- JSON serialized list of weight_sheets
+        """
+        wt_sheets = WeightSheet.objects.all()
+
+        # filtering weight_sheet by date
+        if "date" in request.query_params:
+            wt_sheets = wt_sheets.filter(date=request.query_params['date'])  
+        # filtering weight_sheet by resident id
+        if "resident" in request.query_params:
+            wt_sheets = wt_sheets.filter(resident=request.query_params['resident'])
+        if "resident" in request.query_params and "date" in request.query_params:
+            wt_sheets = wt_sheets.filter(
+                resident=request.query_params['resident'], date=request.query_params['date'])
+
+
+        serializer = WeightSheetSerializer(wt_sheets, many=True)
+        return Response(serializer.data)
+
+
+    def retrieve(self, request, pk):
+        """Handle GET requests for single weight sheet
+
+        Returns:
+            Response -- JSON serialized resident
+        """
+        try:
+            wt_sheet = WeightSheet.objects.get(pk=pk)
+        except WeightSheet.DoesNotExist:
+            return Response({'message': 'You sent an invalid weight_sheet ID'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = WeightSheetSerializer(wt_sheet)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class WeightSheetSerializer(serializers.ModelSerializer):
+    """JSON serializer for weight_sheets"""
+    class Meta:
+        model = WeightSheet
+        fields = ('id', 'employee', 'date', 'resident',
+                  'reweighed', 'refused', 'not_in_room', 'daily_wts', 'show_alert', 'scale_type')
