@@ -2,7 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from weighttrackingapi.models import Message
+from weighttrackingapi.models import Message, Employee, EmployeeMessage
 
 
 class MessageView(ViewSet):
@@ -42,6 +42,9 @@ class MessageView(ViewSet):
         Returns
             Response -- JSON serialized message instance
         """
+        sender = Employee.objects.get(user=request.auth.user)
+        recipients =request.data["recipients"]
+        print(recipients)
         message = Message.objects.create(
             subject=request.data["subject"],
             message_body=request.data["message_body"],
@@ -51,6 +54,16 @@ class MessageView(ViewSet):
         )
         message.save()
         serializer = MessageSerializer(message)
+        # print(f"The new message has id: {serializer.data['id']}")
+        new_message_id = serializer.data['id']
+        for recipient in recipients:
+            employee_message=EmployeeMessage.objects.create(
+                message = Message.objects.get(pk=new_message_id),
+                sender = sender,
+                recipient = Employee.objects.get(pk=recipient)
+            )
+            employee_message.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk):
