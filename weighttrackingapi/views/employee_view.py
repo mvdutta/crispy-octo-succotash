@@ -30,20 +30,7 @@ class EmployeeView(ViewSet):
             return Response({'message': 'You sent an invalid employee ID'}, status=status.HTTP_404_NOT_FOUND)
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
-        """Handle POST operations
-
-        Returns
-            Response -- JSON serialized employee instance
-        """
-        employee = Employee.objects.get(user=request.auth.user)
-        employee = Employee.objects.create(
-            user = employee,
-            role = request.data["role"]
-        )
-        serializer = EmployeeSerializer(employee)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
 
 class EmployeeSerializer(serializers.ModelSerializer):
     """SON serializer for employees"""
