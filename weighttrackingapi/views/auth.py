@@ -58,15 +58,12 @@ def register_user(request):
     '''
     # Create a new user by invoking the `create_user` helper method
     # on Django's built-in User model
-    print("HELLO!!!!!!!!")
     missing_fields = []
     username = request.data.get('username', None)
     password = request.data.get('password', None)
     first_name = request.data.get('first_name', None)
     last_name = request.data.get('last_name', None)
     role = request.data.get('role', None)
-    print("recieved data:")
-    print(username,password, first_name, last_name, role)
 
     if not username:
         missing_fields.append("username")
