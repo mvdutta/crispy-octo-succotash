@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from weighttrackingapi.models import Employee
+import random
 
 ROLES = ["NP", "RD", "MD", "RN", "LPN", "CNA"] 
 
@@ -63,8 +64,9 @@ def register_user(request):
     password = request.data.get('password', None)
     first_name = request.data.get('first_name', None)
     last_name = request.data.get('last_name', None)
-    email = request.data.get('email', None)
     role = request.data.get('role', None)
+    print("recieved data:")
+    print(username,password, first_name, last_name, role)
 
     if not username:
         missing_fields.append("username")
@@ -76,8 +78,6 @@ def register_user(request):
         missing_fields.append("last_name")
     if not role:
         missing_fields.append("role")
-    if not email:
-        missing_fields.append("email")
     
     if missing_fields:
         msg = "Please provide: " + ", ".join(missing_fields)
@@ -92,7 +92,7 @@ def register_user(request):
         password = request.data['password'],
         first_name = request.data['first_name'],
         last_name = request.data['last_name'],
-        email = request.data['email']
+        email = first_name+"."+last_name+str(random.randint(0,9))+"@gsrh.com"
     )
 
     # Now save the extra info in the weighttrackingapi_employee table
