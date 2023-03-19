@@ -12,7 +12,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": "floor",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -28,7 +28,7 @@
       "daily_wts": true,
       "show_alert": false,
       "scale_type": "chair",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -44,7 +44,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": "floor",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -60,7 +60,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": null,
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -76,7 +76,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": null,
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -92,7 +92,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": "chair",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -108,7 +108,7 @@
       "daily_wts": false,
       "show_alert": false,
       "scale_type": "bed",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -124,7 +124,7 @@
       "daily_wts": false,
       "show_alert": true,
       "scale_type": "chair",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -140,7 +140,7 @@
       "daily_wts": true,
       "show_alert": false,
       "scale_type": "bed",
-      "final": "false"
+      "final": false
     }
   },
   {
@@ -156,7 +156,7 @@
       "daily_wts": true,
       "show_alert": true,
       "scale_type": "chair",
-      "final": "false"
+      "final": false
     }
   }
 ]
