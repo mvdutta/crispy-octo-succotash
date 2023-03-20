@@ -50,6 +50,7 @@ class MessageView(ViewSet):
             date_created=request.data["date_created"],
             read=request.data["read"],
             deleted=request.data["deleted"],
+            sender = sender
         )
         message.save()
         serializer = MessageSerializer(message)
@@ -88,17 +89,18 @@ class MessageView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
-class EmployeeMessageSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(serializers.ModelSerializer):
     """JSON serializer for message sender"""
     class Meta:
-        model = EmployeeMessage
-        fields = ('id', 'sender')
+        model = Employee
+        fields = ('id', 'user')
+        depth = 1
 
 
 
 class MessageSerializer(serializers.ModelSerializer):
     """JSON serializer for messages"""
-    sender = EmployeeMessageSerializer(many=False)
+    sender = EmployeeSerializer(many=False)
     class Meta:
         model = Message
         fields = ('id', 'subject', 'message_body', 'date_created', 'read', 'deleted', 'sender')
