@@ -38,6 +38,7 @@ def login_user(request):
         data = {
             'valid': True,
             'token': token.key,
+            'id': user_id,
             'name': name,
             'role': role
         }

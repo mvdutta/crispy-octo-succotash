@@ -43,7 +43,7 @@ class EmployeeView(ViewSet):
     
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    """SON serializer for employees"""
+    """JSON serializer for employees"""
     class Meta:
         model = Employee
         fields = ('id', 'user', 'role')
