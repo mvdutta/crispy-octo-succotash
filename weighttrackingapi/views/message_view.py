@@ -44,17 +44,16 @@ class MessageView(ViewSet):
         """
         sender = Employee.objects.get(user=request.auth.user)
         recipients =request.data["recipients"]
-        print(recipients)
         message = Message.objects.create(
             subject=request.data["subject"],
             message_body=request.data["message_body"],
             date_created=request.data["date_created"],
             read=request.data["read"],
             deleted=request.data["deleted"],
+            sender = sender
         )
         message.save()
         serializer = MessageSerializer(message)
-        # print(f"The new message has id: {serializer.data['id']}")
         new_message_id = serializer.data['id']
         for recipient in recipients:
             employee_message=EmployeeMessage.objects.create(
@@ -73,9 +72,6 @@ class MessageView(ViewSet):
             Response -- Empty body with 204 status code
         """
         message = Message.objects.get(pk=pk)
-        message.subject = request.data["subject"]
-        message.message_body = request.data["message_body"]
-        message.date_created = request.data["date_created"]
         message.read = request.data["read"]
         message.deleted = request.data["deleted"]
         message.save()
@@ -93,8 +89,20 @@ class MessageView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
+class EmployeeSerializer(serializers.ModelSerializer):
+    """JSON serializer for message sender"""
+    class Meta:
+        model = Employee
+        fields = ('id', 'user')
+        depth = 1
+
+
+
 class MessageSerializer(serializers.ModelSerializer):
     """JSON serializer for messages"""
+    sender = EmployeeSerializer(many=False)
     class Meta:
         model = Message
-        fields = ('id', 'subject', 'message_body', 'date_created', 'read', 'deleted')
+        fields = ('id', 'subject', 'message_body', 'date_created', 'read', 'deleted', 'sender')
+        depth = 1
+

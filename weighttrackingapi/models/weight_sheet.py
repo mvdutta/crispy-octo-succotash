@@ -13,6 +13,7 @@ class WeightSheet(models.Model):
     daily_wts = models.BooleanField(default=False)
     show_alert = models.BooleanField(default=False)
     scale_type = models.CharField(max_length=50, null=True)
+    final = models.BooleanField(default=False)
 
 
 

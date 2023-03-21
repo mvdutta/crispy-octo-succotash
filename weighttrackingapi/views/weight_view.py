@@ -81,3 +81,4 @@ class WeightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weight
         fields = ('id', 'resident', 'date', 'weight')
+        depth = 1

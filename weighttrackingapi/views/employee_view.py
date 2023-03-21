@@ -31,9 +31,20 @@ class EmployeeView(ViewSet):
         serializer = EmployeeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    def destroy(self, request, pk):
+        """Handle DELETE requests for employees
+
+        Returns:
+            Response: None with 204 status code
+        """
+        employee = Employee.objects.get(pk=pk)
+        employee.delete()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    """SON serializer for employees"""
+    """JSON serializer for employees"""
     class Meta:
         model = Employee
         fields = ('id', 'user', 'role')
+        depth = 1

@@ -4,3 +4,4 @@ from .employee_view import EmployeeView
 from .wt_sheet_view import WeightSheetView
 from .weight_view import WeightView
 from .message_view import MessageView
+from .employee_msg_view import EmployeeMessageView

@@ -11,7 +11,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": "floor"
+      "scale_type": "floor",
+      "final": false
     }
   },
   {
@@ -26,7 +27,8 @@
       "not_in_room": false,
       "daily_wts": true,
       "show_alert": false,
-      "scale_type": "chair"
+      "scale_type": "chair",
+      "final": false
     }
   },
   {
@@ -41,7 +43,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": "floor"
+      "scale_type": "floor",
+      "final": false
     }
   },
   {
@@ -56,7 +59,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": null
+      "scale_type": null,
+      "final": false
     }
   },
   {
@@ -71,7 +75,8 @@
       "not_in_room": true,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": null
+      "scale_type": null,
+      "final": false
     }
   },
   {
@@ -86,7 +91,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": "chair"
+      "scale_type": "chair",
+      "final": false
     }
   },
   {
@@ -101,7 +107,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": false,
-      "scale_type": "bed"
+      "scale_type": "bed",
+      "final": false
     }
   },
   {
@@ -116,7 +123,8 @@
       "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
-      "scale_type": "chair"
+      "scale_type": "chair",
+      "final": false
     }
   },
   {
@@ -131,7 +139,8 @@
       "not_in_room": false,
       "daily_wts": true,
       "show_alert": false,
-      "scale_type": "bed"
+      "scale_type": "bed",
+      "final": false
     }
   },
   {
@@ -146,7 +155,8 @@
       "not_in_room": false,
       "daily_wts": true,
       "show_alert": true,
-      "scale_type": "chair"
+      "scale_type": "chair",
+      "final": false
     }
   }
 ]

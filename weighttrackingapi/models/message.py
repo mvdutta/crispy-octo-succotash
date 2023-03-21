@@ -9,5 +9,7 @@ class Message(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     read = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+    sender = models.ForeignKey(
+        "Employee", on_delete=models.CASCADE, related_name='message_sender')
 
 

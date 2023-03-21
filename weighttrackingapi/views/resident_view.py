@@ -2,6 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
+from django.db.models import Q
 from weighttrackingapi.models import Resident
 
 
@@ -14,9 +15,21 @@ class ResidentView(ViewSet):
         Returns:
             Response -- JSON serialized list of residents
         """
+        
+
+        if "keyword" in request.query_params:
+           print(request.query_params['keyword'])
+           residents = Resident.objects.filter(
+               Q(first_name__contains=request.query_params['keyword'])
+               | Q(last_name__contains=request.query_params['keyword'])
+           ) 
+           serializer = ResidentSerializer(residents, many=True)
+           return Response(serializer.data)
+        
         residents = Resident.objects.all()
         serializer = ResidentSerializer(residents, many=True)
         return Response(serializer.data)
+        
     
     def retrieve(self, request, pk):
         """Handle GET requests for single resident
