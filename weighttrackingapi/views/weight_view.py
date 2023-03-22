@@ -2,7 +2,28 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
+from rest_framework.decorators import action
 from weighttrackingapi.models import Weight, Resident
+from datetime import date, datetime, timedelta
+
+
+def get_closest_weight(weight_objects, lookbackdays):
+
+    '''
+    Requires a dictionary of weights and corresponding dates ("weight_objects") and the number of days we are looking back to "lookbackdays"
+    Returns a dictionary with the closest date to the time requested and the weight on that date
+    '''
+    lookbackdate = datetime.today() - timedelta(days=lookbackdays)
+    weights = [x[1] for x in weight_objects if x[0] != datetime.today().date()]
+    dates = [x[0] for x in weight_objects if x[0] != datetime.today().date()]
+    diffs = [abs((x[0]-lookbackdate.date()).days) for x in weight_objects if x[0] != datetime.today().date()]
+    min_diff = min(diffs)
+    index = diffs.index(min_diff)
+    closest_date = dates[index]
+    weight_on_closest_date = weights[index]
+    return {"closest_date": closest_date, "weight": weight_on_closest_date }
+
+LOOKBACK_DICT = {"1week": 7, "1month":30, "3month":90, "6month":180}
 
 
 class WeightView(ViewSet):
@@ -74,6 +95,98 @@ class WeightView(ViewSet):
         weight.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=False, methods=['get'])
+    def closestdate(self, request, pk=None):
+        '''Returns the date closest to a certain day for a given resident'''
+        resident = Resident.objects.get(pk=request.query_params["resident"])
+        weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
+        lookback = request.query_params["lookback"]
+        if lookback not in ["1week", "1month", "3month", "6month"]:
+            return Response({"msg": "Invalid lookback value"}, status=status.HTTP_400_BAD_REQUEST)
+        lookbackdays = LOOKBACK_DICT[lookback]
+        res = get_closest_weight(weight_objects, lookbackdays)
+        return Response(res, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def closestdate_all(self, request, pk=None):
+        '''Returns the date closest to a certain day'''
+        lookback = request.query_params["lookback"]
+        if lookback not in ["1week", "1month", "3month", "6month"]:
+            return Response({"msg": "Invalid lookback value"}, status=status.HTTP_400_BAD_REQUEST)
+        lookbackdays = LOOKBACK_DICT[lookback]
+
+        
+        residents = Resident.objects.all()
+        results = []
+        for resident in residents:
+            weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
+
+            res = get_closest_weight(weight_objects, lookbackdays)
+            res["resident_id"] = resident.id
+            results.append(res)
+        return Response(results, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def rd_summary(self, request, pk=None):
+        '''Creates a weight summary of patient for RD view'''
+        resident = Resident.objects.get(pk=request.query_params["resident"])
+        resident_data = ResidentSerializer(resident).data
+        weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
+    
+        try:
+            weight = Weight.objects.get(resident=resident, date=datetime.today().strftime('%Y-%m-%d'))
+            weight_serializer = WeightSerializer(weight)
+            current_weight = float(weight_serializer.data["weight"])
+            
+        except Weight.DoesNotExist:
+            current_weight = float(get_closest_weight(weight_objects, 0)["weight"])
+
+        prev_wt_1week = get_closest_weight(weight_objects, 7)["weight"]
+        prev_wt_1month = get_closest_weight(weight_objects, 30)["weight"]
+        prev_wt_3month = get_closest_weight(weight_objects, 60)["weight"]
+        prev_wt_6month = get_closest_weight(weight_objects, 60)["weight"]
+
+        BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
+
+        print(current_weight, prev_wt_1week, prev_wt_1month, prev_wt_3month, prev_wt_6month)
+
+        # Percentage changes
+             
+        try:
+            perc_change_1wk= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
+        except TypeError:
+            perc_change_1wk = "Not Available"
+        try:
+            perc_change_1month= 100*(-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
+        except TypeError:
+            perc_change_1month = "Not Available"
+        try:
+            perc_change_3month= 100*(-float(prev_wt_3month)+current_weight)/float(prev_wt_3month)
+        except TypeError:
+            perc_change_3month = "Not Available"
+        try:
+            perc_change_6month= 100*(-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
+        except TypeError:
+            perc_change_6month = "Not Available"
+
+        
+
+
+
+
+        response = {
+            "patient_name": f"{resident_data['last_name']}, {resident_data['first_name']}",
+            "admission_date": resident_data["admission_date"],
+            "ABW": resident_data["admission_wt"],
+            "CBW": current_weight,
+            "BMI": BMI,
+            "perc_change_1wk": perc_change_1wk,
+            "perc_change_1month": perc_change_1month,
+            "perc_change_3month": perc_change_3month,
+            "perc_change_5month": perc_change_6month,
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class WeightSerializer(serializers.ModelSerializer):
@@ -81,4 +194,9 @@ class WeightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weight
         fields = ('id', 'resident', 'date', 'weight')
-        depth = 1
+
+class ResidentSerializer(serializers.ModelSerializer):
+    """JSON serializer for residents"""
+    class Meta:
+        model = Resident
+        fields = ('id', 'first_name', 'last_name', 'room_num', 'admission_wt', 'usual_wt', 'height', 'admission_date')

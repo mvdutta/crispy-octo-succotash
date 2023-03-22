@@ -72,7 +72,7 @@
       "resident": 5,
       "reweighed": false,
       "refused": false,
-      "not_in_room": true,
+      "not_in_room": false,
       "daily_wts": false,
       "show_alert": true,
       "scale_type": null,
