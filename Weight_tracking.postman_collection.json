@@ -1,0 +1,776 @@
+{
+	"info": {
+		"_postman_id": "6dd1dea1-e11e-41de-bbab-f90cc6004cda",
+		"name": "Weight_tracking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16209625"
+	},
+	"item": [
+		{
+			"name": "GET all residents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/residents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"residents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET resident by ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/residents/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"residents",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all employees",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/employees",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register new user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n        \"username\": \"mjackson\",\n        \"password\": \"giraffes22\",\n        \"first_name\": \"Michael\",\n        \"last_name\": \"Jackson\",\n        \"email\": \"mjackson@gsrh.com\",\n        \"role\": \"RD\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 8796d274364883d72d3d2daf86e0bb9ff8b3c7e8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mjackson\",\n    \"password\": \"giraffes22\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search weight sheet by date and resident",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/weightsheets?date=2023-02-28&resident=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-02-28"
+						},
+						{
+							"key": "resident",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search weight sheet by date only",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/weightsheets?date=2023-02-28&resident=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-02-28"
+						},
+						{
+							"key": "resident",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "weightsheet details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/weightsheets/detailedview?date=2023-03-20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets",
+						"detailedview"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-03-20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "weightsheet details Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/weightsheets/detailedview_rd?date=2023-03-20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets",
+						"detailedview_rd"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-03-20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all weightsheets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/weightsheets?date=2023-02-28&resident=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-02-28"
+						},
+						{
+							"key": "resident",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST weightsheets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n    {\n        \"employee\": 1,\n        \"date\": \"2023-02-28\",\n        \"resident\": 3,\n        \"reweighed\": true,\n        \"refused\": false,\n        \"not_in_room\": false,\n        \"daily_wts\": false,\n        \"show_alert\": true,\n        \"scale_type\": \"floor\"\n    }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weightsheets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST weightsheets many",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n    {\n        \"employee\": 1,\n        \"date\": \"2023-02-28\",\n        \"resident\": 3,\n        \"reweighed\": true,\n        \"refused\": false,\n        \"not_in_room\": false,\n        \"daily_wts\": false,\n        \"show_alert\": true,\n        \"scale_type\": \"floor\"\n    }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weightsheets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT weightsheets",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 14,\n    \"employee\": 1,\n    \"date\": \"2023-02-28\",\n    \"resident\": 4,\n    \"reweighed\": true,\n    \"refused\": false,\n    \"not_in_room\": false,\n    \"daily_wts\": false,\n    \"show_alert\": true,\n    \"scale_type\": \"floor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weightsheets/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT weights",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 14,\n    \"employee\": 1,\n    \"date\": \"2023-02-28\",\n    \"resident\": 4,\n    \"reweighed\": true,\n    \"refused\": false,\n    \"not_in_room\": false,\n    \"daily_wts\": false,\n    \"show_alert\": true,\n    \"scale_type\": \"floor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weightsheets/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weightsheets",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all weights",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 51,\n    \"resident\": 1,\n    \"date\": \"2023-03-07\",\n    \"weight\": \"160.8\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weights",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weights"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET closest weight by date and resident",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 51,\n    \"resident\": 1,\n    \"date\": \"2023-03-07\",\n    \"weight\": \"160.8\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weights/closestdate?resident=1&lookback=3month",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weights",
+						"closestdate"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-03-20",
+							"disabled": true
+						},
+						{
+							"key": "resident",
+							"value": "1"
+						},
+						{
+							"key": "lookback",
+							"value": "3month"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET rd_summary by resident_id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 51,\n    \"resident\": 1,\n    \"date\": \"2023-03-07\",\n    \"weight\": \"160.8\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weights/rd_summary?resident=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weights",
+						"rd_summary"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2023-03-20",
+							"disabled": true
+						},
+						{
+							"key": "resident",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET closest weight by date for all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 51,\n    \"resident\": 1,\n    \"date\": \"2023-03-07\",\n    \"weight\": \"160.8\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/weights/closestdate_all?lookback=1week",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"weights",
+						"closestdate_all"
+					],
+					"query": [
+						{
+							"key": "lookback",
+							"value": "1week"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all messages",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST request messages",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"subject\": \"Please send updated weight sheet for 03/07/23\",\n    \"message_body\": \"Please send the updated sheet as soon as you are able. Thanks so much.\",\n    \"date_created\": \"2023-03-08T00:00:00Z\",\n    \"read\": true,\n    \"deleted\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT request messages",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3,\n    \"subject\": \"Please send updated weight sheet for 03/07/23\",\n    \"message_body\": \"Please send the updated sheet as soon as you are able. It doesn't look like the one that was submitted was complete. Thanks so much.\",\n    \"date_created\": \"2023-03-13T17:15:05.036458Z\",\n    \"read\": true,\n    \"deleted\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE message by id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c38b5d49d9b684964eaaaf98be755743c792c106",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/messages/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
