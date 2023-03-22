@@ -154,9 +154,9 @@ class WeightView(ViewSet):
         # Percentage changes
              
         try:
-            perc_change_1wk= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
+            perc_change_1week= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
         except TypeError:
-            perc_change_1wk = "Not Available"
+            perc_change_1week = "Not Available"
         try:
             perc_change_1month= 100*(-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
         except TypeError:
@@ -181,10 +181,11 @@ class WeightView(ViewSet):
             "ABW": resident_data["admission_wt"],
             "CBW": current_weight,
             "BMI": BMI,
-            "perc_change_1wk": perc_change_1wk,
+            "PBW": prev_wt_1week,
+            "perc_change_1week": perc_change_1week,
             "perc_change_1month": perc_change_1month,
             "perc_change_3month": perc_change_3month,
-            "perc_change_5month": perc_change_6month,
+            "perc_change_6month": perc_change_6month,
         }
         return Response(response, status=status.HTTP_200_OK)
 
