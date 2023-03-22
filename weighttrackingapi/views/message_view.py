@@ -63,7 +63,7 @@ class MessageView(ViewSet):
             )
             employee_message.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"msg": "Message sent"}, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk):
         """Handle PUT operations for message
