@@ -149,8 +149,6 @@ class WeightView(ViewSet):
 
         BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
 
-        print(current_weight, prev_wt_1week, prev_wt_1month, prev_wt_3month, prev_wt_6month)
-
         # Percentage changes
              
         try:
@@ -169,11 +167,7 @@ class WeightView(ViewSet):
             perc_change_6month= 100*(-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
         except TypeError:
             perc_change_6month = "Not Available"
-
-        
-
-
-
+    
 
         response = {
             "patient_name": f"{resident_data['last_name']}, {resident_data['first_name']}",

@@ -8,7 +8,7 @@ from weighttrackingapi.models import WeightSheet, Employee, Resident, Weight
 
 
 def dictfetchall(cursor):
-    "Return all rows from a cursor as a dict"
+    "Return all rows from a cursor as a dict used by SQL"
     columns = [col[0] for col in cursor.description]
     return [
         dict(zip(columns, row))
@@ -111,35 +111,13 @@ class WeightSheetView(ViewSet):
         wt_sheet.save()
         return Response({"msg": "Record updated"}, status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-    # @action(detail=False, methods=['get', 'post', 'delete'])
-    # def detailedview(self, request, pk=None):
-    #     '''Shows all details for weightsheet'''
-    #     # with connection.cursor() as cursor:
-    #     #     cursor.execute('''with temp as (
-    #     #         select w.weight, w.id as weight_id, ws.id as weight_sheet_id, ws.final, ws.resident_id, ws.reweighed, ws.refused, ws.not_in_room, ws.daily_wts, ws.show_alert, ws.scale_type from weighttrackingapi_weight w
-    #     #         join weighttrackingapi_weightsheet ws
-    #     #         on ws.resident_id = w.resident_id
-    #     #         where w.date = %s
-    #     #         and ws.final=0
-    #     #         )
-    #     #         select r.first_name, r.last_name, r.room_num, temp.* from temp
-    #     #         join weighttrackingapi_resident r
-    #     #         where temp.resident_id = r.id''', [request.query_params['date']])
-    #     #     res = dictfetchall(cursor)
-
-    #     weights = Weight.objects.filter(date=request.query_params["date"])
-    #     weights_serialized = WeightSerializer(weights, many=True)
-    #     all_weights = weights_serialized.data
-    #     weightsheets = WeightSheet.objects.filter(date=request.query_params["date"])
-    
-    #     return Response(all_weights, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get', 'post', 'delete'])
     def detailedview_rd(self, request, pk=None):
         '''Shows all details for weightsheet'''
+        # Joining the weight table (w) with the weightsheet table ws on resident_id and selecting columns from both tables
+        # Store the result as a temporary table temp
+        # Join this temp table with the resident table to get the first_name, last_name room_num etc from the resident table 
         with connection.cursor() as cursor:
             cursor.execute('''with temp as (
                 select w.weight, w.id as weight_id, ws.id as weight_sheet_id, ws.final, ws.resident_id, ws.reweighed, ws.refused, ws.not_in_room, ws.daily_wts, ws.show_alert, ws.scale_type from weighttrackingapi_weight w
@@ -150,6 +128,7 @@ class WeightSheetView(ViewSet):
                 select r.first_name, r.last_name, r.room_num, temp.* from temp
                 join weighttrackingapi_resident r
                 where temp.resident_id = r.id''', [request.query_params['date'], request.query_params['date']])
+            #the results of the sql query are converted into an ordinary python dictionary using the Django-provided helper function (directly from the docs) DictFetchAll
             res = dictfetchall(cursor)
     
         return Response(res)
@@ -159,9 +138,6 @@ class WeightSheetView(ViewSet):
     @action(detail=False, methods=['post'])
     def create_all_weightsheets(self, request, pk=None):
         '''Creates ALL weightsheets for a given day Only if they don't already exist'''
-
-        print(request.body)
-
         employee = Employee.objects.get(user=request.auth.user)
         residents = Resident.objects.all()
         i=0
@@ -190,9 +166,6 @@ class WeightSheetView(ViewSet):
 
         return Response({"msg": f"{i} Weightsheets created"}, status=status.HTTP_201_CREATED)
     
-
-
-
 
 class WeightSheetSerializer(serializers.ModelSerializer):
     """JSON serializer for weight_sheets"""
