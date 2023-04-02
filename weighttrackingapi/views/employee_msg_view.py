@@ -2,7 +2,8 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from weighttrackingapi.models import EmployeeMessage
+from weighttrackingapi.models import EmployeeMessage, Employee
+from django.contrib.auth.models import User
 
 
 class EmployeeMessageView(ViewSet):
@@ -15,10 +16,11 @@ class EmployeeMessageView(ViewSet):
             Response -- JSON serialized list of employees
         """
         employee_msgs = EmployeeMessage.objects.all()
+        employee = Employee.objects.get(user=request.query_params['recipient'])#select the employee by their userid
 
         if "recipient" in request.query_params:
             employee_msgs = employee_msgs.filter(
-                recipient=request.query_params['recipient'])
+                recipient=employee)
             
         serializer = EmployeeMessageSerializer(employee_msgs, many=True)
         return Response(serializer.data)
