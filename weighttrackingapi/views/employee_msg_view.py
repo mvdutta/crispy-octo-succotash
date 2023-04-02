@@ -60,7 +60,7 @@ class EmployeeMessageView(ViewSet):
             employee_msgs = employee_msgs.filter(
                 recipient=employee, message__read=False)
         res = {"num_msgs": len(employee_msgs)}
-        return Response(res)
+        return Response(res, status=status.HTTP_200_OK)
 
 
 
