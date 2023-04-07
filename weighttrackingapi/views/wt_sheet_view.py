@@ -4,6 +4,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import action
+from datetime import datetime
 from weighttrackingapi.models import WeightSheet, Employee, Resident, Weight
 
 
@@ -165,6 +166,22 @@ class WeightSheetView(ViewSet):
                 print("created")
 
         return Response({"msg": f"{i} Weightsheets created"}, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['delete'])
+    def delete_weightsheets(self, request, pk=None):
+        '''deletes weightsheets by date'''
+        if "date" not in request.query_params:
+            res = {"message": "A date must be provided"}
+            return Response(res, status=status.HTTP_403_FORBIDDEN)
+        date = datetime.now().strftime('%Y-%m-%d')
+        print(date)
+        wt_sheets = WeightSheet.objects.filter(
+            date=date)
+        wt_sheets.delete()
+        wts = Weight.objects.filter(date=date)
+        wts.delete()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
     
 
 class WeightSheetSerializer(serializers.ModelSerializer):

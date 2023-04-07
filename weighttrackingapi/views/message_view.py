@@ -91,12 +91,20 @@ class MessageView(ViewSet):
     
     @action(detail=True, methods=['put'])
     def togglereadstatus(self, request, pk):
-        """Toggles message from unread to read"""
+        """Toggles message from unread to read and vice versa"""
         message = Message.objects.get(pk=pk)
         message.read = not message.read
         message.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
-
+    
+    @action(detail=True, methods=['put'])
+    def changeunreadtoread(self, request, pk):
+        """changes message from unread to read"""
+        message = Message.objects.get(pk=pk)
+        if not message.read:
+            message.read = True
+            message.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 class EmployeeSerializer(serializers.ModelSerializer):
     """JSON serializer for message sender"""
