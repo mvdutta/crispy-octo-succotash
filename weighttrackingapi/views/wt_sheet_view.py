@@ -184,10 +184,10 @@ class WeightSheetView(ViewSet):
     @action(detail=False, methods=['put'])
     def unsave_weightsheets(self, request, pk=None):
         '''Changes the final field to false for all weightsheets making them editable again'''
-        if "date" not in request.query_params:
+        if "date" not in request.data:
             res = {"message": "A date must be provided"}
             return Response(res, status=status.HTTP_403_FORBIDDEN)
-        date = request.query_params["date"]
+        date = request.data["date"]
         wt_sheets = WeightSheet.objects.filter(
             date=date)
         for wt_sheet in wt_sheets:
@@ -198,10 +198,10 @@ class WeightSheetView(ViewSet):
     @action(detail=False, methods=['put'])
     def save_weightsheets(self, request, pk=None):
         '''Changes the final field to true for all weightsheets making them uneditable'''
-        if "date" not in request.query_params:
+        if "date" not in request.data:
             res = {"message": "A date must be provided"}
             return Response(res, status=status.HTTP_403_FORBIDDEN)
-        date = request.query_params["date"]
+        date = request.data["date"]
         wt_sheets = WeightSheet.objects.filter(
             date=date)
         for wt_sheet in wt_sheets:
