@@ -168,19 +168,69 @@ class WeightSheetView(ViewSet):
         return Response({"msg": f"{i} Weightsheets created"}, status=status.HTTP_201_CREATED)
     
     @action(detail=False, methods=['delete'])
-    def delete_weightsheets(self, request, pk=None):
+    def delete_all_by_date(self, request, pk=None):
         '''deletes weightsheets by date'''
         if "date" not in request.query_params:
             res = {"message": "A date must be provided"}
             return Response(res, status=status.HTTP_403_FORBIDDEN)
-        date = datetime.now().strftime('%Y-%m-%d')
-        print(date)
+        date = request.query_params["date"]
         wt_sheets = WeightSheet.objects.filter(
             date=date)
         wt_sheets.delete()
         wts = Weight.objects.filter(date=date)
         wts.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=False, methods=['put'])
+    def unsave_weightsheets(self, request, pk=None):
+        '''Changes the final field to false for all weightsheets making them editable again'''
+        if "date" not in request.query_params:
+            res = {"message": "A date must be provided"}
+            return Response(res, status=status.HTTP_403_FORBIDDEN)
+        date = request.query_params["date"]
+        wt_sheets = WeightSheet.objects.filter(
+            date=date)
+        for wt_sheet in wt_sheets:
+            wt_sheet.final=0
+            wt_sheet.save()
+        return Response({"msg": "Records updated"}, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=False, methods=['put'])
+    def save_weightsheets(self, request, pk=None):
+        '''Changes the final field to true for all weightsheets making them uneditable'''
+        if "date" not in request.query_params:
+            res = {"message": "A date must be provided"}
+            return Response(res, status=status.HTTP_403_FORBIDDEN)
+        date = request.query_params["date"]
+        wt_sheets = WeightSheet.objects.filter(
+            date=date)
+        for wt_sheet in wt_sheets:
+            wt_sheet.final = 1
+            wt_sheet.save()
+        return Response({"msg": "Records updated"}, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(detail=False, methods=['get'])
+    def dates(self, request, pk=None):
+        '''Gets all dates for which weightsheets have been done'''
+        wt_sheets = WeightSheet.objects.all()
+        serializer = WeightSheetDateSerializer(wt_sheets, many=True)
+
+        dates = list(set([x["date"] for x in serializer.data]))
+        dates.sort(key=lambda date: datetime.strptime(
+            date, "%Y-%m-%d"), reverse=True)
+        return Response({"dates": dates}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'])
+    def finalized_dates(self, request, pk=None):
+        '''Gets all dates for which weightsheets have been done'''
+        wt_sheets = WeightSheet.objects.filter(final=1)
+        serializer = WeightSheetDateSerializer(wt_sheets, many=True)
+
+        dates = list(set([x["date"] for x in serializer.data]))
+        dates.sort(key=lambda date: datetime.strptime(
+            date, "%Y-%m-%d"), reverse=True)
+        return Response({"dates": dates}, status=status.HTTP_200_OK)
+
 
     
 
@@ -196,3 +246,10 @@ class WeightSerializer(serializers.ModelSerializer):
         model = Weight
         fields = ('id', 'resident', 'date', 'weight')
         depth = 1
+
+
+class WeightSheetDateSerializer(serializers.ModelSerializer):
+    """JSON serializer for weight_sheets"""
+    class Meta:
+        model = WeightSheet
+        fields = ('id','date','final')
