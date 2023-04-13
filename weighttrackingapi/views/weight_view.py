@@ -44,10 +44,11 @@ class WeightView(ViewSet):
         # filtering weight by resident id
         if "resident" in request.query_params:
             weight = weight.filter(
-                resident=request.query_params['resident'])
+                resident=request.query_params['resident']).order_by('date')
+
         if "resident" in request.query_params and "date" in request.query_params:
             weight = weight.filter(
-                resident=request.query_params['resident'], date=request.query_params['date'])
+                resident=request.query_params['resident'], date=request.query_params['date'])        
         serializer = WeightSerializer(weight, many=True)
         return Response(serializer.data)
 
@@ -150,10 +151,29 @@ class WeightView(ViewSet):
         except Weight.DoesNotExist:
             current_weight = float(get_closest_weight(weight_objects, 0, datestr)["weight"])
 
-        prev_wt_1week = get_closest_weight(weight_objects, 7, datestr)["weight"]
-        prev_wt_1month = get_closest_weight(weight_objects, 30, datestr)["weight"]
-        prev_wt_3month = get_closest_weight(weight_objects, 60, datestr)["weight"]
-        prev_wt_6month = get_closest_weight(weight_objects, 60, datestr)["weight"]
+        w7 = get_closest_weight(weight_objects, 7, datestr)
+        w30 = get_closest_weight(weight_objects, 30, datestr)
+        w90 = get_closest_weight(weight_objects, 90, datestr)
+        w180 = get_closest_weight(weight_objects, 180, datestr)
+        prev_wt_1week = w7["weight"]
+        prev_wt_1month = w30["weight"]
+        prev_wt_3month = w90["weight"]
+        prev_wt_6month = w180["weight"]
+
+        prev_dt_1week = w7["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
+        dts = [prev_dt_1week, prev_dt_1month, prev_dt_3month, prev_dt_6month]
+        wts = [prev_wt_1week, prev_wt_1month, prev_wt_3month, prev_wt_6month]
+        # weight_history = dict(
+        #     zip([datetime.today().strftime('%m-%d-%Y'), prev_dt_1week, prev_dt_1month, prev_dt_3month, prev_dt_6month], [current_weight, float(prev_wt_1week), float(prev_wt_1month), float(prev_wt_3month), float(prev_wt_6month)]))
+        weight_history = {'dates':[], 'weights':[]}
+        for (dt,wt) in zip(dts,wts):
+            if wt is not None:
+                weight_history['dates'].append(dt)
+                weight_history['weights'].append(float(wt))
+        print(weight_history)
 
         BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
 
@@ -188,6 +208,7 @@ class WeightView(ViewSet):
             "perc_change_1month": perc_change_1month,
             "perc_change_3month": perc_change_3month,
             "perc_change_6month": perc_change_6month,
+            "weight_history": weight_history
         }
         return Response(response, status=status.HTTP_200_OK)
 
