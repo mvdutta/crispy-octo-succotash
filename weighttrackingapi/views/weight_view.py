@@ -169,8 +169,10 @@ class WeightView(ViewSet):
         # weight_history = dict(
         #     zip([datetime.today().strftime('%m-%d-%Y'), prev_dt_1week, prev_dt_1month, prev_dt_3month, prev_dt_6month], [current_weight, float(prev_wt_1week), float(prev_wt_1month), float(prev_wt_3month), float(prev_wt_6month)]))
         weight_history = {'dates':[], 'weights':[]}
+        weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
+        weight_history["weights"].append(current_weight)
         for (dt,wt) in zip(dts,wts):
-            if wt is not None:
+            if wt is not None and dt not in weight_history['dates']:
                 weight_history['dates'].append(dt)
                 weight_history['weights'].append(float(wt))
         print(weight_history)
