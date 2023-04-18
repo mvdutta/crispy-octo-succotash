@@ -164,18 +164,15 @@ class WeightView(ViewSet):
         prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
         prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
         prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
-        dts = [prev_dt_1week, prev_dt_1month, prev_dt_3month, prev_dt_6month]
-        wts = [prev_wt_1week, prev_wt_1month, prev_wt_3month, prev_wt_6month]
-        # weight_history = dict(
-        #     zip([datetime.today().strftime('%m-%d-%Y'), prev_dt_1week, prev_dt_1month, prev_dt_3month, prev_dt_6month], [current_weight, float(prev_wt_1week), float(prev_wt_1month), float(prev_wt_3month), float(prev_wt_6month)]))
-        weight_history = {'dates':[], 'weights':[]}
-        weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
-        weight_history["weights"].append(current_weight)
+        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, prev_dt_1week]
+        wts = [prev_wt_6month, prev_wt_3month, prev_wt_1month, prev_wt_1week]
+        weight_history = {'dates':[], 'weights':[]} 
         for (dt,wt) in zip(dts,wts):
-            if wt is not None and dt not in weight_history['dates']:
+            if wt is not None and wt!=0 and dt not in weight_history['dates']:
                 weight_history['dates'].append(dt)
                 weight_history['weights'].append(float(wt))
-        print(weight_history)
+        weight_history["weights"].append(current_weight)
+        weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
 
         BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
 
@@ -185,17 +182,25 @@ class WeightView(ViewSet):
             perc_change_1week= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
         except TypeError:
             perc_change_1week = "Not Available"
+        except ZeroDivisionError:
+            perc_change_1week = "Not Available"
         try:
             perc_change_1month= 100*(-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
         except TypeError:
+            perc_change_1month = "Not Available"
+        except ZeroDivisionError:
             perc_change_1month = "Not Available"
         try:
             perc_change_3month= 100*(-float(prev_wt_3month)+current_weight)/float(prev_wt_3month)
         except TypeError:
             perc_change_3month = "Not Available"
+        except ZeroDivisionError:
+            perc_change_3month = "Not Available"
         try:
             perc_change_6month= 100*(-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
         except TypeError:
+            perc_change_6month = "Not Available"
+        except ZeroDivisionError:
             perc_change_6month = "Not Available"
     
 
