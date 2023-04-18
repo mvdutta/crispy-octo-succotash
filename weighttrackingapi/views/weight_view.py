@@ -7,16 +7,17 @@ from weighttrackingapi.models import Weight, Resident
 from datetime import date, datetime, timedelta
 
 
-def get_closest_weight(weight_objects, lookbackdays):
+def get_closest_weight(weight_objects, lookbackdays, datestr):
 
     '''
     Requires a dictionary of weights and corresponding dates ("weight_objects") and the number of days we are looking back to "lookbackdays"
     Returns a dictionary with the closest date to the time requested and the weight on that date
     '''
-    lookbackdate = datetime.today() - timedelta(days=lookbackdays)
-    weights = [x[1] for x in weight_objects if x[0] != datetime.today().date()]
-    dates = [x[0] for x in weight_objects if x[0] != datetime.today().date()]
-    diffs = [abs((x[0]-lookbackdate.date()).days) for x in weight_objects if x[0] != datetime.today().date()]
+    ref_date = datetime.strptime(datestr, '%Y-%m-%d').date()
+    lookbackdate = datetime.strptime(datestr, '%Y-%m-%d')- timedelta(days=lookbackdays)
+    weights = [x[1] for x in weight_objects if x[0] != ref_date]
+    dates = [x[0] for x in weight_objects if x[0] != ref_date]
+    diffs = [abs((x[0]-lookbackdate.date()).days) for x in weight_objects if x[0] != ref_date]
     min_diff = min(diffs)
     index = diffs.index(min_diff)
     closest_date = dates[index]
@@ -43,10 +44,11 @@ class WeightView(ViewSet):
         # filtering weight by resident id
         if "resident" in request.query_params:
             weight = weight.filter(
-                resident=request.query_params['resident'])
+                resident=request.query_params['resident']).order_by('date')
+
         if "resident" in request.query_params and "date" in request.query_params:
             weight = weight.filter(
-                resident=request.query_params['resident'], date=request.query_params['date'])
+                resident=request.query_params['resident'], date=request.query_params['date'])        
         serializer = WeightSerializer(weight, many=True)
         return Response(serializer.data)
 
@@ -101,17 +103,23 @@ class WeightView(ViewSet):
         '''Returns the date closest to a certain day for a given resident'''
         resident = Resident.objects.get(pk=request.query_params["resident"])
         weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
-        lookback = request.query_params["lookback"]
+        if "date" not in request.query_params:
+            return Response({"msg": "A reference date must be provided for looking back"}, status=status.HTTP_400_BAD_REQUEST)
+        ref_date = request.query_params["date"]
+        lookback = request.query_params.get("lookback")
         if lookback not in ["1week", "1month", "3month", "6month"]:
             return Response({"msg": "Invalid lookback value"}, status=status.HTTP_400_BAD_REQUEST)
         lookbackdays = LOOKBACK_DICT[lookback]
-        res = get_closest_weight(weight_objects, lookbackdays)
+        res = get_closest_weight(weight_objects, lookbackdays, ref_date)
         return Response(res, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'])
     def closestdate_all(self, request, pk=None):
         '''Returns the date closest to a certain day'''
-        lookback = request.query_params["lookback"]
+        if "date" not in request.query_params:
+            return Response({"msg": "A reference date must be provided for looking back"}, status=status.HTTP_400_BAD_REQUEST)
+        ref_date = request.query_params["date"]
+        lookback = request.query_params.get("lookback")
         if lookback not in ["1week", "1month", "3month", "6month"]:
             return Response({"msg": "Invalid lookback value"}, status=status.HTTP_400_BAD_REQUEST)
         lookbackdays = LOOKBACK_DICT[lookback]
@@ -122,7 +130,7 @@ class WeightView(ViewSet):
         for resident in residents:
             weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
 
-            res = get_closest_weight(weight_objects, lookbackdays)
+            res = get_closest_weight(weight_objects, lookbackdays, ref_date)
             res["resident_id"] = resident.id
             results.append(res)
         return Response(results, status=status.HTTP_200_OK)
@@ -130,6 +138,7 @@ class WeightView(ViewSet):
     @action(detail=False, methods=['get'])
     def rd_summary(self, request, pk=None):
         '''Creates a weight summary of patient for RD view'''
+        datestr = datetime.now().strftime("%Y-%m-%d")
         resident = Resident.objects.get(pk=request.query_params["resident"])
         resident_data = ResidentSerializer(resident).data
         weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
@@ -140,12 +149,30 @@ class WeightView(ViewSet):
             current_weight = float(weight_serializer.data["weight"])
             
         except Weight.DoesNotExist:
-            current_weight = float(get_closest_weight(weight_objects, 0)["weight"])
+            current_weight = float(get_closest_weight(weight_objects, 0, datestr)["weight"])
 
-        prev_wt_1week = get_closest_weight(weight_objects, 7)["weight"]
-        prev_wt_1month = get_closest_weight(weight_objects, 30)["weight"]
-        prev_wt_3month = get_closest_weight(weight_objects, 60)["weight"]
-        prev_wt_6month = get_closest_weight(weight_objects, 60)["weight"]
+        w7 = get_closest_weight(weight_objects, 7, datestr)
+        w30 = get_closest_weight(weight_objects, 30, datestr)
+        w90 = get_closest_weight(weight_objects, 90, datestr)
+        w180 = get_closest_weight(weight_objects, 180, datestr)
+        prev_wt_1week = w7["weight"]
+        prev_wt_1month = w30["weight"]
+        prev_wt_3month = w90["weight"]
+        prev_wt_6month = w180["weight"]
+
+        prev_dt_1week = w7["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
+        prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
+        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, prev_dt_1week]
+        wts = [prev_wt_6month, prev_wt_3month, prev_wt_1month, prev_wt_1week]
+        weight_history = {'dates':[], 'weights':[]} 
+        for (dt,wt) in zip(dts,wts):
+            if wt is not None and wt!=0 and dt not in weight_history['dates']:
+                weight_history['dates'].append(dt)
+                weight_history['weights'].append(float(wt))
+        weight_history["weights"].append(current_weight)
+        weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
 
         BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
 
@@ -155,17 +182,25 @@ class WeightView(ViewSet):
             perc_change_1week= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
         except TypeError:
             perc_change_1week = "Not Available"
+        except ZeroDivisionError:
+            perc_change_1week = "Not Available"
         try:
             perc_change_1month= 100*(-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
         except TypeError:
+            perc_change_1month = "Not Available"
+        except ZeroDivisionError:
             perc_change_1month = "Not Available"
         try:
             perc_change_3month= 100*(-float(prev_wt_3month)+current_weight)/float(prev_wt_3month)
         except TypeError:
             perc_change_3month = "Not Available"
+        except ZeroDivisionError:
+            perc_change_3month = "Not Available"
         try:
             perc_change_6month= 100*(-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
         except TypeError:
+            perc_change_6month = "Not Available"
+        except ZeroDivisionError:
             perc_change_6month = "Not Available"
     
 
@@ -180,6 +215,7 @@ class WeightView(ViewSet):
             "perc_change_1month": perc_change_1month,
             "perc_change_3month": perc_change_3month,
             "perc_change_6month": perc_change_6month,
+            "weight_history": weight_history
         }
         return Response(response, status=status.HTTP_200_OK)
 

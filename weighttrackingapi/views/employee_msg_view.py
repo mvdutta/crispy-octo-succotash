@@ -62,9 +62,6 @@ class EmployeeMessageView(ViewSet):
         res = {"num_msgs": len(employee_msgs)}
         return Response(res, status=status.HTTP_200_OK)
 
-
-
-
 class EmployeeMessageSerializer(serializers.ModelSerializer):
     """JSON serializer for employee_msgs"""
     class Meta:
