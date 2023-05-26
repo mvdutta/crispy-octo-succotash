@@ -93,7 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'weighttracking.wsgi.application'
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True" or True
 
 
 # Database
