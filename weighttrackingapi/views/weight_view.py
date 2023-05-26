@@ -171,8 +171,8 @@ class WeightView(ViewSet):
             if wt is not None and wt!=0 and dt not in weight_history['dates']:
                 weight_history['dates'].append(dt)
                 weight_history['weights'].append(float(wt))
-        weight_history["weights"].append(current_weight)
-        weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
+        # weight_history["weights"].append(current_weight)
+        # weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
 
         BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
 
