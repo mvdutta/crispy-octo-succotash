@@ -20,8 +20,8 @@ class ResidentView(ViewSet):
         if "keyword" in request.query_params:
            print(request.query_params['keyword'])
            residents = Resident.objects.filter(
-               Q(first_name__contains=request.query_params['keyword'])
-               | Q(last_name__contains=request.query_params['keyword'])
+               Q(first_name__icontains=request.query_params['keyword'])
+               | Q(last_name__icontains=request.query_params['keyword'])
            ) 
            serializer = ResidentSerializer(residents, many=True)
            return Response(serializer.data)
