@@ -120,15 +120,35 @@ class WeightSheetView(ViewSet):
         # Store the result as a temporary table temp
         # Join this temp table with the resident table to get the first_name, last_name room_num etc from the resident table 
         with connection.cursor() as cursor:
-            cursor.execute('''with temp as (
-                select w.weight, w.id as weight_id, ws.id as weight_sheet_id, ws.final, ws.resident_id, ws.reweighed, ws.refused, ws.not_in_room, ws.daily_wts, ws.show_alert, ws.scale_type from weighttrackingapi_weight w
-                join weighttrackingapi_weightsheet ws
-                on ws.resident_id = w.resident_id
-                where w.date = %s and ws.date = %s
-                )
-                select r.first_name, r.last_name, r.room_num, temp.* from temp
-                join weighttrackingapi_resident r
-                where temp.resident_id = r.id''', [request.query_params['date'], request.query_params['date']])
+            cursor.execute('''WITH temp AS (
+    SELECT
+        w.weight,
+        w.id AS weight_id,
+        ws.id AS weight_sheet_id,
+        ws.final,
+        ws.resident_id,
+        ws.reweighed,
+        ws.refused,
+        ws.not_in_room,
+        ws.daily_wts,
+        ws.show_alert,
+        ws.scale_type
+    FROM
+        weighttrackingapi_weight w
+        JOIN weighttrackingapi_weightsheet ws ON ws.resident_id = w.resident_id
+    WHERE
+        w.date = %s
+        AND ws.date = %s
+)
+SELECT
+    r.first_name,
+    r.last_name,
+    r.room_num,
+    temp.*
+FROM
+    temp
+    JOIN weighttrackingapi_resident r ON temp.resident_id = r.id;
+''', [request.query_params['date'], request.query_params['date']])
             #the results of the sql query are converted into an ordinary python dictionary using the Django-provided helper function (directly from the docs) DictFetchAll
             res = dictfetchall(cursor)
     
