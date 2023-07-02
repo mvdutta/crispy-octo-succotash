@@ -141,17 +141,25 @@ class WeightView(ViewSet):
         datestr = datetime.now().strftime("%Y-%m-%d")
         resident = Resident.objects.get(pk=request.query_params["resident"])
         resident_data = ResidentSerializer(resident).data
-        weight_objects = Weight.objects.filter(resident=resident).values_list('date','weight')
-    
+        weight_objects = Weight.objects.filter(
+            resident=resident).values_list('date', 'weight')
+        # This variable stores the last date
+        last_wt_recorded_date = datestr
+
         try:
-            weight = Weight.objects.get(resident=resident, date=datetime.today().strftime('%Y-%m-%d'))
+            weight = Weight.objects.get(
+                resident=resident, date=datetime.today().strftime('%Y-%m-%d'))
             weight_serializer = WeightSerializer(weight)
             current_weight = float(weight_serializer.data["weight"])
-            
-        except Weight.DoesNotExist:
-            current_weight = float(get_closest_weight(weight_objects, 0, datestr)["weight"])
+            last_wt_recorded_date = datestr
 
-        w7 = get_closest_weight(weight_objects, 7, datestr)
+        except Weight.DoesNotExist:
+            current_weight = float(get_closest_weight(
+                weight_objects, 0, datestr)["weight"])
+            last_wt_recorded_date = get_closest_weight(
+                weight_objects, 0, datestr)["closest_date"].strftime("%Y-%m-%d")
+
+        w7 = get_closest_weight(weight_objects, 7, last_wt_recorded_date)
         w30 = get_closest_weight(weight_objects, 30, datestr)
         w90 = get_closest_weight(weight_objects, 90, datestr)
         w180 = get_closest_weight(weight_objects, 180, datestr)
@@ -166,43 +174,47 @@ class WeightView(ViewSet):
         prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
         dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, prev_dt_1week]
         wts = [prev_wt_6month, prev_wt_3month, prev_wt_1month, prev_wt_1week]
-        weight_history = {'dates':[], 'weights':[]} 
-        for (dt,wt) in zip(dts,wts):
-            if wt is not None and wt!=0 and dt not in weight_history['dates']:
+        weight_history = {'dates': [], 'weights': []}
+        for (dt, wt) in zip(dts, wts):
+            if wt is not None and wt != 0 and dt not in weight_history['dates']:
                 weight_history['dates'].append(dt)
                 weight_history['weights'].append(float(wt))
         # weight_history["weights"].append(current_weight)
         # weight_history["dates"].append(datetime.today().strftime('%m-%d-%Y'))
 
-        BMI = 703*float(current_weight)/(float(resident_data["height"])*float(resident_data["height"]))
+        BMI = 703*float(current_weight) / \
+            (float(resident_data["height"])*float(resident_data["height"]))
 
         # Percentage changes
-             
+
         try:
-            perc_change_1week= 100*(-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
+            perc_change_1week = 100 * \
+                (-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
         except TypeError:
             perc_change_1week = "Not Available"
         except ZeroDivisionError:
             perc_change_1week = "Not Available"
         try:
-            perc_change_1month= 100*(-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
+            perc_change_1month = 100 * \
+                (-float(prev_wt_1month)+current_weight)/float(prev_wt_1month)
         except TypeError:
             perc_change_1month = "Not Available"
         except ZeroDivisionError:
             perc_change_1month = "Not Available"
         try:
-            perc_change_3month= 100*(-float(prev_wt_3month)+current_weight)/float(prev_wt_3month)
+            perc_change_3month = 100 * \
+                (-float(prev_wt_3month)+current_weight)/float(prev_wt_3month)
         except TypeError:
             perc_change_3month = "Not Available"
         except ZeroDivisionError:
             perc_change_3month = "Not Available"
         try:
-            perc_change_6month= 100*(-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
+            perc_change_6month = 100 * \
+                (-float(prev_wt_6month)+current_weight)/float(prev_wt_6month)
         except TypeError:
             perc_change_6month = "Not Available"
         except ZeroDivisionError:
             perc_change_6month = "Not Available"
-    
 
         response = {
             "patient_name": f"{resident_data['last_name']}, {resident_data['first_name']}",
