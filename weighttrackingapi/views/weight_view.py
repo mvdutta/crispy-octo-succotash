@@ -167,11 +167,11 @@ class WeightView(ViewSet):
         next_to_last_recorded_weight = next_to_last_recorded["weight"]
         next_to_last_recorded_date = next_to_last_recorded["closest_date"].strftime(
             '%m-%d-%Y')
-        print(last_wt_recorded_date, next_to_last_recorded_date)
+    
         w7 = get_closest_weight(weight_objects, 7, datestr)
-        w30 = get_closest_weight(weight_objects, 30, datestr)
-        w90 = get_closest_weight(weight_objects, 90, datestr)
-        w180 = get_closest_weight(weight_objects, 180, datestr)
+        w30 = get_closest_weight(weight_objects, 30, last_wt_recorded_date)
+        w90 = get_closest_weight(weight_objects, 90, last_wt_recorded_date)
+        w180 = get_closest_weight(weight_objects, 180, last_wt_recorded_date)
         prev_wt_1week = w7["weight"]
         prev_wt_1month = w30["weight"]
         prev_wt_3month = w90["weight"]
