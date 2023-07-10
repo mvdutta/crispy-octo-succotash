@@ -151,19 +151,23 @@ class WeightView(ViewSet):
                 resident=resident, date=datetime.today().strftime('%Y-%m-%d'))
             weight_serializer = WeightSerializer(weight)
             current_weight = float(weight_serializer.data["weight"])
-            last_wt_recorded_date = datestr
+ 
 
         except Weight.DoesNotExist:
             current_weight = float(get_closest_weight(
                 weight_objects, 0, datestr)["weight"])
             last_wt_recorded_date = get_closest_weight(
-                weight_objects, 0, datestr)["closest_date"].strftime("%Y-%m-%d")
+                weight_objects, 0, datestr)["closest_date"].strftime(
+                '%Y-%m-%d')
+        #creating a new variable to store the last recorded date in mm-dd-yyyy format    
+        last_wt_recorded_date_mdY = datetime.strptime(last_wt_recorded_date, "%Y-%m-%d").strftime('%m-%d-%Y')
 
         next_to_last_recorded = get_closest_weight(
             weight_objects, 7, last_wt_recorded_date)
         next_to_last_recorded_weight = next_to_last_recorded["weight"]
         next_to_last_recorded_date = next_to_last_recorded["closest_date"].strftime(
             '%m-%d-%Y')
+        print(last_wt_recorded_date, next_to_last_recorded_date)
         w7 = get_closest_weight(weight_objects, 7, datestr)
         w30 = get_closest_weight(weight_objects, 30, datestr)
         w90 = get_closest_weight(weight_objects, 90, datestr)
@@ -177,9 +181,10 @@ class WeightView(ViewSet):
         prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
         prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
         prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
-        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, next_to_last_recorded_date]
+        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month,
+               next_to_last_recorded_date, last_wt_recorded_date_mdY]
         wts = [prev_wt_6month, prev_wt_3month,
-               prev_wt_1month, next_to_last_recorded_weight]
+               prev_wt_1month, next_to_last_recorded_weight, current_weight]
         weight_history = {'dates': [], 'weights': []}
         for (dt, wt) in zip(dts, wts):
             if wt is not None and wt != 0 and dt not in weight_history['dates']:
