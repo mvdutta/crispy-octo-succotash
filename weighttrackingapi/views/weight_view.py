@@ -168,16 +168,15 @@ class WeightView(ViewSet):
         next_to_last_recorded_date = next_to_last_recorded["closest_date"].strftime(
             '%m-%d-%Y')
     
-        w7 = get_closest_weight(weight_objects, 7, datestr)
         w30 = get_closest_weight(weight_objects, 30, last_wt_recorded_date)
         w90 = get_closest_weight(weight_objects, 90, last_wt_recorded_date)
         w180 = get_closest_weight(weight_objects, 180, last_wt_recorded_date)
-        prev_wt_1week = w7["weight"]
+
         prev_wt_1month = w30["weight"]
         prev_wt_3month = w90["weight"]
         prev_wt_6month = w180["weight"]
 
-        prev_dt_1week = w7["closest_date"].strftime('%m-%d-%Y')
+
         prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
         prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
         prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
@@ -200,7 +199,8 @@ class WeightView(ViewSet):
 
         try:
             perc_change_1week = 100 * \
-                (-float(next_to_last_recorded_weight)+current_weight)/float(prev_wt_1week)
+                (-float(next_to_last_recorded_weight)+current_weight) / \
+                float(next_to_last_recorded_weight)
         except TypeError:
             perc_change_1week = "Not Available"
         except ZeroDivisionError:
