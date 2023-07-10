@@ -167,21 +167,21 @@ WSGI_APPLICATION = 'weighttracking.wsgi.application'
 # }
 
 # USE THIS FOR LOCAL DEVELOPMENT - Database deployed on Render
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'weighttracker_db',
-        'USER': 'weighttracker_db_user',
-        'PASSWORD': 'NTiy0R7FKhhmZWKSZTPQhbQ6KD51ZhGv',
-        'HOST': 'dpg-chtq32d269vccp1f26sg-a.ohio-postgres.render.com',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'weighttracker_db',
+#         'USER': 'weighttracker_db_user',
+#         'PASSWORD': 'NTiy0R7FKhhmZWKSZTPQhbQ6KD51ZhGv',
+#         'HOST': 'dpg-chtq32d269vccp1f26sg-a.ohio-postgres.render.com',
+#         'PORT': '5432',
+#     }
+# }
 
 # USE THIS FOR PRODUCTION - Database deployed on Render
-# DATABASES = {
-#     'default': dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600),
-# }
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600),
+}
 
 
 # Password validation
