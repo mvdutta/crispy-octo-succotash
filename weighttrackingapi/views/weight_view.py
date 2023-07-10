@@ -159,8 +159,11 @@ class WeightView(ViewSet):
             last_wt_recorded_date = get_closest_weight(
                 weight_objects, 0, datestr)["closest_date"].strftime("%Y-%m-%d")
 
-        next_to_last_recorded_weight = get_closest_weight(
-            weight_objects, 7, last_wt_recorded_date)["weight"]
+        next_to_last_recorded = get_closest_weight(
+            weight_objects, 7, last_wt_recorded_date)
+        next_to_last_recorded_weight = next_to_last_recorded["weight"]
+        next_to_last_recorded_date = next_to_last_recorded["closest_date"].strftime(
+            '%m-%d-%Y')
         w7 = get_closest_weight(weight_objects, 7, datestr)
         w30 = get_closest_weight(weight_objects, 30, datestr)
         w90 = get_closest_weight(weight_objects, 90, datestr)
@@ -174,8 +177,9 @@ class WeightView(ViewSet):
         prev_dt_1month = w30["closest_date"].strftime('%m-%d-%Y')
         prev_dt_3month = w90["closest_date"].strftime('%m-%d-%Y')
         prev_dt_6month = w180["closest_date"].strftime('%m-%d-%Y')
-        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, prev_dt_1week]
-        wts = [prev_wt_6month, prev_wt_3month, prev_wt_1month, prev_wt_1week]
+        dts = [prev_dt_6month, prev_dt_3month, prev_dt_1month, next_to_last_recorded_date]
+        wts = [prev_wt_6month, prev_wt_3month,
+               prev_wt_1month, next_to_last_recorded_weight]
         weight_history = {'dates': [], 'weights': []}
         for (dt, wt) in zip(dts, wts):
             if wt is not None and wt != 0 and dt not in weight_history['dates']:
