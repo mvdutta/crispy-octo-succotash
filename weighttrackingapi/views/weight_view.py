@@ -159,7 +159,9 @@ class WeightView(ViewSet):
             last_wt_recorded_date = get_closest_weight(
                 weight_objects, 0, datestr)["closest_date"].strftime("%Y-%m-%d")
 
-        w7 = get_closest_weight(weight_objects, 7, last_wt_recorded_date)
+        next_to_last_recorded_weight = get_closest_weight(
+            weight_objects, 7, last_wt_recorded_date)["weight"]
+        w7 = get_closest_weight(weight_objects, 7, datestr)
         w30 = get_closest_weight(weight_objects, 30, datestr)
         w90 = get_closest_weight(weight_objects, 90, datestr)
         w180 = get_closest_weight(weight_objects, 180, datestr)
@@ -189,7 +191,7 @@ class WeightView(ViewSet):
 
         try:
             perc_change_1week = 100 * \
-                (-float(prev_wt_1week)+current_weight)/float(prev_wt_1week)
+                (-float(next_to_last_recorded_weight)+current_weight)/float(prev_wt_1week)
         except TypeError:
             perc_change_1week = "Not Available"
         except ZeroDivisionError:
@@ -222,7 +224,7 @@ class WeightView(ViewSet):
             "ABW": resident_data["admission_wt"],
             "CBW": current_weight,
             "BMI": BMI,
-            "PBW": prev_wt_1week,
+            "PBW": next_to_last_recorded_weight,
             "perc_change_1week": perc_change_1week,
             "perc_change_1month": perc_change_1month,
             "perc_change_3month": perc_change_3month,

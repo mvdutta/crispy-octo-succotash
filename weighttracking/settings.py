@@ -144,6 +144,8 @@ WSGI_APPLICATION = 'weighttracking.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
+# NOT NECESSARY ANYMORE
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -152,7 +154,7 @@ WSGI_APPLICATION = 'weighttracking.wsgi.application'
 # }
 
 
-
+# This database is deployed on Railway and can be used as an alternative database.Not really necessary
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -164,7 +166,19 @@ WSGI_APPLICATION = 'weighttracking.wsgi.application'
 #     }
 # }
 
+# USE THIS FOR LOCAL DEVELOPMENT - Database deployed on Render
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'weighttracker_db',
+#         'USER': 'weighttracker_db_user',
+#         'PASSWORD': 'NTiy0R7FKhhmZWKSZTPQhbQ6KD51ZhGv',
+#         'HOST': 'dpg-chtq32d269vccp1f26sg-a.ohio-postgres.render.com',
+#         'PORT': '5432',
+#     }
+# }
 
+# USE THIS FOR PRODUCTION - Database deployed on Render
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600),
 }
